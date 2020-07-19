@@ -5,9 +5,13 @@ import Acceuil from "../components/acceuil.vue";
 import TheatreInfoContenu1 from "../components/theatreinfoContenu1.vue";
 import TheatreInfoContenu2 from "../components/theatreinfoContenu2.vue";
 import TheatreInfoContenu3 from "../components/theatreinfoContenu3.vue";
+import Programmation from "../components/programmation.vue";
+import Places from "../components/places.vue";
 Vue.use(VueRouter);
 
 const routes = [
+  { path: "/programmation", component: Programmation },
+  { path: "/places", component: Places },
   {
     path: "",
     component: Acceuil,

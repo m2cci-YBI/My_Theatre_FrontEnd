@@ -1,8 +1,10 @@
-<style></style>
+<style scoped></style>
+
 <template>
   <div id="app">
     <Header />
     <router-view> </router-view>
+
     <Footer />
   </div>
 </template>

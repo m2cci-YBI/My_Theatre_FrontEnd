@@ -10,15 +10,15 @@ h2 {
 
 <template>
   <div class="container-fluid bg-dark pb-5 pt-2 text-center">
-    <h2 class="py-3">Promotions de la Semaine</h2>
+    <h2 class="py-4">Promotions de la Semaine</h2>
     <div class="row ">
-      <div class="col-4">
+      <div class="col-md-4 mb-3">
         <SpectacleCard titre="harryPotter" />
       </div>
-      <div class="col-4">
+      <div class="col-md-4 mb-3">
         <SpectacleCard titre="leCid" />
       </div>
-      <div class="col-4">
+      <div class="col-md-4 mb-3">
         <SpectacleCard titre="harryPotter" />
       </div>
     </div>

@@ -4,8 +4,8 @@
 }
 .card-container {
   position: relative;
-  width: 250px;
-  height: 320px;
+  width: 70%;
+  height: 350px;
 }
 .thecard {
   position: absolute;
@@ -67,7 +67,7 @@ img {
           <h3>{{ titre.toUpperCase() }}</h3>
           <p>20 % Discount</p>
         </div>
-        <div class="btn btn-primary">Reserver</div>
+        <div class="btn btn-primary">Consulter</div>
       </div>
     </div>
   </div>

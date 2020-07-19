@@ -1,7 +1,9 @@
 <template>
   <nav class="navbar navbar-expand-sm navbar-dark nav-bg ">
     <div class="container">
-      <a href="#" class="navbar-brand brand-font ">MyTheater</a>
+      <router-link to="/" class="navbar-brand brand-font "
+        >MyTheater</router-link
+      >
       <button
         class="navbar-toggler"
         data-toggle="collapse"
@@ -12,19 +14,21 @@
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item active">
-            <a href="#" class="nav-link">Home</a>
+            <router-link to="/" class="nav-link">Home</router-link>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">About Us</a>
+            <router-link to="/programmation" class="nav-link"
+              >Programmation</router-link
+            >
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">Services</a>
+            <router-link to="" class="nav-link">Panier</router-link>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">Blog</a>
+            <router-link to="" class="nav-link">Login</router-link>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">Contact</a>
+            <router-link to="" class="nav-link">Logout</router-link>
           </li>
         </ul>
       </div>
@@ -32,13 +36,36 @@
   </nav>
 </template>
 <script>
-export default {};
+export default {
+  mounted() {
+    const items = document.querySelectorAll(".nav-item");
+    const brand_item = document.querySelector(".navbar-brand");
+    brand_item.addEventListener("click", activerHome);
+    items.forEach((item) => item.addEventListener("click", activer));
+    function activerHome() {
+      items.forEach((element) => {
+        element.classList.remove("active");
+      });
+      items[0].classList.add("active");
+    }
+    function activer() {
+      items.forEach((element) => {
+        element.classList.remove("active");
+      });
+      this.classList.add("active");
+    }
+  },
+};
 </script>
 
 <style>
 .brand-font {
   font-family: Berkshire Swash, sans-serif;
   font-size: 1.7rem !important;
+}
+
+.navbar .nav-item {
+  padding-left: 5px;
 }
 .navbar .nav-item.active {
   border-left: #444 3px Solid;

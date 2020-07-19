@@ -17,7 +17,6 @@
               et délaisse sa fiancée Hermione, fille d’Hélène. Pour Oreste, qui
               n’a cessé d’aimer en vain Hermione, l’espoir renaît...
             </p>
-            <a href="" class="btn btn-primary btn-lg">Voir Suite</a>
           </div>
         </div>
       </div>
@@ -33,7 +32,6 @@
               toilette, afin qu'il ne retourne jamais à Poudlard. Heureusement,
               les incorrigibles frères Weasley décident d'agir...
             </p>
-            <a href="" class="btn btn-primary btn-lg">Voir Suite</a>
           </div>
         </div>
       </div>
@@ -48,7 +46,6 @@
               n'ose pas se déclarer... Car elle est belle et il est laid,
               affligé d'un énorme nez. Par amour pour elle,...
             </p>
-            <a href="" class="btn btn-primary btn-lg">Voir Suite</a>
           </div>
         </div>
       </div>
@@ -70,6 +67,9 @@
 }
 h1 {
   font-family: Berkshire Swash, sans-serif;
+}
+p {
+  padding-bottom: 7rem;
 }
 
 .carousel-image-1 {
