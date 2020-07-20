@@ -1,7 +1,7 @@
 <template>
-  <nav class="navbar navbar-expand-sm navbar-dark nav-bg ">
+  <nav class="navbar navbar-expand-sm navbar-dark nav-bg">
     <div class="container">
-      <router-link to="/" class="navbar-brand brand-font "
+      <router-link to="/" class="navbar-brand brand-font"
         >MyTheater</router-link
       >
       <button

@@ -3,6 +3,7 @@
 <template>
   <div id="app">
     <Header />
+
     <router-view> </router-view>
 
     <Footer />

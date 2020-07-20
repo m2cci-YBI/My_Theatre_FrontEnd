@@ -29,38 +29,34 @@ img {
         <Filtre name="ToutPublic" />
         <Filtre name="Adulte" />
       </div>
-      <div class="col-md-10 ">
+      <div class="col-md-10">
         <div class="row">
           <div class="col">
-            <form class="form-inline ">
-              <div class="input-group ">
+            <form class="form-inline">
+              <div class="input-group">
                 <label for="debut" class="mx-2">DateDebut</label>
                 <input
                   type="date"
-                  class="form-control "
+                  class="form-control"
                   placeholder="DateDebut"
                 />
               </div>
-              <div class="input-group ">
+              <div class="input-group">
                 <label for="debut" class="mx-2">DateFin</label>
-                <input
-                  type="date"
-                  class="form-control "
-                  placeholder="DateFin"
-                />
+                <input type="date" class="form-control" placeholder="DateFin" />
               </div>
               <div class="input-group">
-                <button type="submit" class="btn btn-primary mx-2 ">
+                <button type="submit" class="btn btn-primary mx-2">
                   Submit
                 </button>
               </div>
             </form>
           </div>
           <div class="col-3">
-            <div class="input-group ">
+            <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text">
-                  <i class="fa fa-search "></i
+                  <i class="fa fa-search"></i
                 ></span>
               </div>
               <input class="form-control" type="text" placeholder="Spectacle" />
@@ -88,7 +84,7 @@ img {
                   <td>
                     <button
                       type="submit"
-                      class="btn btn-primary mx-2 "
+                      class="btn btn-primary mx-2"
                       data-toggle="modal"
                       data-target="#mymodal"
                     >
@@ -113,7 +109,7 @@ img {
           </div>
           <div class="modal-body">
             <div class="row">
-              <div class="col-4 ">
+              <div class="col-4">
                 <img src="../assets/harryPotter.jpg" alt="" />
               </div>
               <div class="col-8">
@@ -137,7 +133,7 @@ img {
               Retour
             </button>
             <router-link to="/places">
-              <button class="btn btn-primary">
+              <button class="btn btn-primary" data-dismiss="modal">
                 Reserver Places
               </button>
             </router-link>
