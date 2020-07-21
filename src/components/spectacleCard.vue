@@ -57,17 +57,54 @@ img {
 </style>
 
 <template>
-  <div class="card-container mx-auto ">
-    <div class="thecard ">
+  <div class="card-container mx-auto">
+    <div class="thecard">
       <div class="front">
-        <img :src="imgSrc" alt="" />
+        <img :src="imgSrc" alt />
       </div>
       <div class="back">
-        <div class="contenu my-5 ">
+        <div class="contenu my-5">
           <h3>{{ titre.toUpperCase() }}</h3>
           <p>20 % Discount</p>
         </div>
-        <div class="btn btn-primary">Consulter</div>
+        <div class="btn btn-primary" data-toggle="modal" data-target="#mymodal">Consulter</div>
+      </div>
+    </div>
+    <div class="modal" id="mymodal">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Harry Potter</h5>
+            <button class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-4">
+                <img src="../assets/harryPotter.jpg" alt />
+              </div>
+              <div class="col-8">
+                <div>
+                  Cet été est horrible ! Les Dursley découvrent que Harry n'a
+                  pas le droit de faire de la magie pendant les vacances et
+                  l'enferment dans sa chambre, en ne le laissant sortir que pour
+                  faire sa toilette, afin qu'il ne retourne jamais à Poudlard.
+                  Heureusement, les incorrigibles frères Weasley décident
+                  d'agir...
+                </div>
+                <div>
+                  <span class="filtre-modal">Musical</span>
+                  <span class="filtre-modal">ToutPublic</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-danger" data-dismiss="modal">Retour</button>
+            <router-link to="/places">
+              <button class="btn btn-primary" data-dismiss="modal">Reserver Places</button>
+            </router-link>
+          </div>
+        </div>
       </div>
     </div>
   </div>

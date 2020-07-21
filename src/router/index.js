@@ -7,11 +7,34 @@ import TheatreInfoContenu2 from "../components/theatreinfoContenu2.vue";
 import TheatreInfoContenu3 from "../components/theatreinfoContenu3.vue";
 import Programmation from "../components/programmation.vue";
 import Places from "../components/places.vue";
+import CoordonneesPerso from "../components/coordonneesPerso.vue";
+import CoordonneesBancaires from "../components/coordonneesBancaires.vue";
+import Panier from "../components/panier.vue";
+import Login from "../components/login.vue";
+import Dashboard from "../components/dashboard.vue";
+import Contact from "../components/contact.vue";
+import Mailer from "../components/mailer.vue";
+import ProgrammationGerant from "../components/programmationGerant.vue"
+import ProgrammationGerantSpec from "../components/programmationGerantSpec.vue"
+import Statistiques from "../components/statistiques.vue"
 Vue.use(VueRouter);
 
 const routes = [
+  { path: "/contact", component: Contact },
+  { path: "/login", component: Login },
   { path: "/programmation", component: Programmation },
   { path: "/places", component: Places },
+  { path: "/coordonneesPerso", component: CoordonneesPerso },
+  { path: "/coordonneesBancaires", component: CoordonneesBancaires },
+  { path: "/panier", component: Panier },
+  {
+    path: "/dashboard", component: Dashboard, children: [
+      { path: "/dashboard", component: ProgrammationGerant },
+      { path: "/dashboard/mailer", component: Mailer },
+      { path: "/dashboard/statistiques", component: Statistiques },
+      { path: "/dashboard/spectacles", component: ProgrammationGerantSpec },
+    ]
+  },
   {
     path: "",
     component: Acceuil,

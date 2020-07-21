@@ -21,7 +21,10 @@
         </div>
         <div class="col-md-6">
           <div class="booking-details">
-            <h4>Places Choisies (<span id="counter">0</span>):</h4>
+            <h4>
+              Places Choisies (
+              <span id="counter">0</span>):
+            </h4>
             <table class="table table-striped">
               <thead>
                 <tr>
@@ -35,10 +38,20 @@
               <tbody id="selected-seats"></tbody>
             </table>
             <div class="my-3">
-              <span>Total:</span><b>$<span id="total">0</span></b>
+              <span>Total:</span>
+              <b>
+                €
+                <span id="total">0</span>
+              </b>
             </div>
+            <div class="row"></div>
+            <router-link to="/coordonneesPerso">
+              <button class="btn btn-primary mr-2">Confirmer</button>
+            </router-link>
 
-            <button class="btn btn-primary">Confirmer &raquo;</button>
+            <router-link to="/programmation">
+              <button class="btn btn-danger mr-2">Retour</button>
+            </router-link>
           </div>
         </div>
       </div>
@@ -60,12 +73,12 @@ export default {
         $total = $("#total"),
         sc = $("#seat-map").seatCharts({
           map: [
-            "p[1_1]p[1_2]p[1_3]_________p[1_4]p[1_5]p[1_6]",
-            "p[2_1]p[2_2]p[2_3]_________p[2_4]p[2_5]p[2_6]",
-            "__b[3_1]b[3_2]b[3_3]_____b[3_4]b[3_5]b[3_6]__",
-            "__b[4_1]b[4_2]b[4_3]_____b[4_4]b[4_5]b[4_6]__",
-            "____o[5_1]o[5_2]o[5_3]o[5_4]o[5_5]o[5_6]_____",
-            "____o[6_1]o[6_2]o[6_3]o[6_4]o[6_5]o[6_6]_____",
+            "p[1_1]p[1_2]p[1_3]________p[1_4]p[1_5]p[1_6]",
+            "p[2_1]p[2_2]p[2_3]________p[2_4]p[2_5]p[2_6]",
+            "__b[3_1]b[3_2]b[3_3]____b[3_4]b[3_5]b[3_6]__",
+            "__b[4_1]b[4_2]b[4_3]____b[4_4]b[4_5]b[4_6]__",
+            "____o[5_1]o[5_2]o[5_3]o[5_4]o[5_5]o[5_6]____",
+            "____o[6_1]o[6_2]o[6_3]o[6_4]o[6_5]o[6_6]____",
           ],
           seats: {
             p: {

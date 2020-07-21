@@ -1,14 +1,8 @@
 <template>
   <nav class="navbar navbar-expand-sm navbar-dark nav-bg">
     <div class="container">
-      <router-link to="/" class="navbar-brand brand-font"
-        >MyTheater</router-link
-      >
-      <button
-        class="navbar-toggler"
-        data-toggle="collapse"
-        data-target="#navbarCollapse"
-      >
+      <router-link to="/" class="navbar-brand brand-font">MyTheater</router-link>
+      <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -17,18 +11,22 @@
             <router-link to="/" class="nav-link">Home</router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/programmation" class="nav-link"
-              >Programmation</router-link
-            >
+            <router-link to="/programmation" class="nav-link">Programmation</router-link>
           </li>
           <li class="nav-item">
-            <router-link to="" class="nav-link">Panier</router-link>
+            <router-link to="/panier" class="nav-link">Panier</router-link>
           </li>
           <li class="nav-item">
-            <router-link to="" class="nav-link">Login</router-link>
+            <router-link to="/dashboard" class="nav-link">Dashboard</router-link>
           </li>
           <li class="nav-item">
-            <router-link to="" class="nav-link">Logout</router-link>
+            <router-link to="/contact" class="nav-link">Contact</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/login" class="nav-link">Login</router-link>
+          </li>
+          <li class="nav-item" @click="logout">
+            <router-link to class="nav-link">Logout</router-link>
           </li>
         </ul>
       </div>
@@ -40,7 +38,9 @@ export default {
   mounted() {
     const items = document.querySelectorAll(".nav-item");
     const brand_item = document.querySelector(".navbar-brand");
+   
     brand_item.addEventListener("click", activerHome);
+   
     items.forEach((item) => item.addEventListener("click", activer));
     function activerHome() {
       items.forEach((element) => {
@@ -55,6 +55,14 @@ export default {
       this.classList.add("active");
     }
   },
+  methods:{
+    logout(){
+      
+      this.$router.replace('/')
+    }
+      
+    
+  }
 };
 </script>
 

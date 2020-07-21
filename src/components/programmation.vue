@@ -17,7 +17,7 @@ img {
 }
 </style>
 <template>
-  <div class="container programmation">
+  <div class="container programmation bg-light">
     <div class="row my-3">
       <div class="col-md-2">
         <h3>Filtres</h3>
@@ -35,20 +35,14 @@ img {
             <form class="form-inline">
               <div class="input-group">
                 <label for="debut" class="mx-2">DateDebut</label>
-                <input
-                  type="date"
-                  class="form-control"
-                  placeholder="DateDebut"
-                />
+                <input type="date" class="form-control" placeholder="DateDebut" />
               </div>
               <div class="input-group">
                 <label for="debut" class="mx-2">DateFin</label>
                 <input type="date" class="form-control" placeholder="DateFin" />
               </div>
               <div class="input-group">
-                <button type="submit" class="btn btn-primary mx-2">
-                  Submit
-                </button>
+                <button type="submit" class="btn btn-primary mx-2">Submit</button>
               </div>
             </form>
           </div>
@@ -56,8 +50,8 @@ img {
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text">
-                  <i class="fa fa-search"></i
-                ></span>
+                  <i class="fa fa-search"></i>
+                </span>
               </div>
               <input class="form-control" type="text" placeholder="Spectacle" />
             </div>
@@ -87,9 +81,7 @@ img {
                       class="btn btn-primary mx-2"
                       data-toggle="modal"
                       data-target="#mymodal"
-                    >
-                      Consulter
-                    </button>
+                    >Consulter</button>
                   </td>
                 </tr>
               </tbody>
@@ -103,14 +95,12 @@ img {
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Harry Potter</h5>
-            <button class="close" data-dismiss="modal">
-              &times;
-            </button>
+            <button class="close" data-dismiss="modal">&times;</button>
           </div>
           <div class="modal-body">
             <div class="row">
               <div class="col-4">
-                <img src="../assets/harryPotter.jpg" alt="" />
+                <img src="../assets/harryPotter.jpg" alt />
               </div>
               <div class="col-8">
                 <div>
@@ -129,13 +119,9 @@ img {
             </div>
           </div>
           <div class="modal-footer">
-            <button class="btn btn-danger" data-dismiss="modal">
-              Retour
-            </button>
+            <button class="btn btn-danger" data-dismiss="modal">Retour</button>
             <router-link to="/places">
-              <button class="btn btn-primary" data-dismiss="modal">
-                Reserver Places
-              </button>
+              <button class="btn btn-primary" data-dismiss="modal">Reserver Places</button>
             </router-link>
           </div>
         </div>
