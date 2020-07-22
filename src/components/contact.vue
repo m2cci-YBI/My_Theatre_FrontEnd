@@ -23,6 +23,15 @@
 
           <input type="text" class="form-control" placeholder="Email" />
         </div>
+        <div class="input-group input-group-lg my-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">
+              <i class="fas fa-file"></i>
+            </span>
+          </div>
+
+          <input type="text" class="form-control" placeholder="Objet" />
+        </div>
         <div class="input-group input-group-lg mb-3">
           <div class="input-group-prepend">
             <span class="input-group-text">
