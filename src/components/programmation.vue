@@ -22,24 +22,29 @@ img {
       <div class="col-md-2">
         <h3>Filtres</h3>
         <h5 class="mt-5">Par Genre</h5>
-        <Filtre name="Comedy" />
-        <Filtre name="Drame" />
-        <Filtre name="Musical" />
+
+        <Filtre name="DRAME" type="genre" :etat="etatFiltres" @check-filtre="checkFiltre" />
+        <Filtre name="CIRQUE" type="genre" :etat="etatFiltres" @check-filtre="checkFiltre" />
+        <Filtre name="MUSICAL" type="genre" :etat="etatFiltres" @check-filtre="checkFiltre" />
+        <Filtre name="HUMORISTIQUE" type="genre" :etat="etatFiltres" @check-filtre="checkFiltre" />
+        <Filtre name="OPERA" type="genre" :etat="etatFiltres" @check-filtre="checkFiltre" />
         <h5 class="mt-5">Par Cible</h5>
-        <Filtre name="ToutPublic" />
-        <Filtre name="Adulte" />
+        <Filtre name="TOUTPUBLIC" type="cible" :etat="etatFiltres" @check-filtre="checkFiltre" />
+        <Filtre name="ADULTE" type="cible" :etat="etatFiltres" @check-filtre="checkFiltre" />
+        <Filtre name="JEUNE" type="cible" :etat="etatFiltres" @check-filtre="checkFiltre" />
+        <Filtre name="ENFANT" type="cible" :etat="etatFiltres" @check-filtre="checkFiltre" />
       </div>
       <div class="col-md-10">
         <div class="row">
           <div class="col">
-            <form class="form-inline">
+            <form class="form-inline" @submit.prevent="onSubmit($event)">
               <div class="input-group">
                 <label for="debut" class="mx-2">DateDebut</label>
-                <input type="date" class="form-control" placeholder="DateDebut" />
+                <input type="date" class="form-control" placeholder="dateDebut" />
               </div>
               <div class="input-group">
                 <label for="debut" class="mx-2">DateFin</label>
-                <input type="date" class="form-control" placeholder="DateFin" />
+                <input type="date" class="form-control" placeholder="dateFin" />
               </div>
               <div class="input-group">
                 <button type="submit" class="btn btn-primary mx-2">Submit</button>
@@ -53,7 +58,13 @@ img {
                   <i class="fa fa-search"></i>
                 </span>
               </div>
-              <input class="form-control" type="text" placeholder="Spectacle" />
+              <input
+                class="form-control"
+                @keyup="filtrerNom($event)"
+                id="filtreNomSpec"
+                type="text"
+                placeholder="Spectacle"
+              />
             </div>
           </div>
         </div>
@@ -66,21 +77,28 @@ img {
                   <th>Date</th>
                   <th>Places Disponibles</th>
                   <th>Taux Reductions</th>
+                  <th>Genre</th>
+                  <th>Cible</th>
+                  <th>PrixDeBase</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Harry Potter</td>
-                  <td>une date</td>
-                  <td>50</td>
-                  <td>20 %</td>
+                <tr v-for="r in representations_base" :key="r.id">
+                  <td>{{r.spectacleNom}}</td>
+                  <td>{{r.horaire}}</td>
+                  <td>{{getPlacesdisponibles(r.id)}}</td>
+                  <td>{{r.tauxPromotion*100}} %</td>
+                  <td>{{r.spectacleType}}</td>
+                  <td>{{r.spectacleCible}}</td>
+                  <td>{{r.spectaclePrix}} €</td>
                   <td>
                     <button
                       type="submit"
                       class="btn btn-primary mx-2"
                       data-toggle="modal"
                       data-target="#mymodal"
+                      @click="passerInfo(r)"
                     >Consulter</button>
                   </td>
                 </tr>
@@ -94,7 +112,7 @@ img {
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Harry Potter</h5>
+            <h5 class="modal-title">{{modalTitre}}</h5>
             <button class="close" data-dismiss="modal">&times;</button>
           </div>
           <div class="modal-body">
@@ -103,18 +121,7 @@ img {
                 <img src="../assets/harryPotter.jpg" alt />
               </div>
               <div class="col-8">
-                <div>
-                  Cet été est horrible ! Les Dursley découvrent que Harry n'a
-                  pas le droit de faire de la magie pendant les vacances et
-                  l'enferment dans sa chambre, en ne le laissant sortir que pour
-                  faire sa toilette, afin qu'il ne retourne jamais à Poudlard.
-                  Heureusement, les incorrigibles frères Weasley décident
-                  d'agir...
-                </div>
-                <div>
-                  <span class="filtre-modal">Musical</span>
-                  <span class="filtre-modal">ToutPublic</span>
-                </div>
+                <div>{{modalDescription}}</div>
               </div>
             </div>
           </div>
@@ -131,9 +138,87 @@ img {
 </template>
 <script>
 import Filtre from "./filtre.vue";
+import axios from "axios";
 export default {
   components: {
     Filtre,
+  },
+  data() {
+    return {
+      representations_base: [],
+      representations_view: [],
+      genre: [],
+      cible: [],
+      etatFiltres: false,
+      modalTitre: "",
+      modalDescription: "",
+    };
+  },
+  mounted() {
+    axios.get(`http://localhost:8081/representations_view`).then((response) => {
+      this.representations_view = response.data;
+      axios
+        .get(
+          `http://localhost:8081/representations?mode=&dateDebut=&dateFin=&semaine=`
+        )
+        .then((response) => {
+          this.$store.state.representations_base = response.data;
+          this.representations_base = this.$store.state.representations_base;
+          console.log(this.representations_base);
+        });
+    });
+  },
+  methods: {
+    onSubmit($event) {
+      let dateDebut = $event.target[0].value;
+      let dateFin = $event.target[1].value;
+      axios
+        .get(
+          `http://localhost:8081/representations?mode=entre&dateDebut=${dateDebut}T00:00:00&dateFin=${dateFin}T00:00:00&semaine=`
+        )
+        .then((response) => {
+          this.$store.state.representations_base = response.data;
+          this.representations_base = this.$store.state.representations_base;
+        });
+
+      this.$store.state.desactiveFiltres = !this.$store.state.desactiveFiltres;
+      this.genre = [];
+      this.cible = [];
+
+      document.querySelector("#filtreNomSpec").value = "";
+    },
+    getPlacesdisponibles(id) {
+      return this.representations_view.filter((item) => item.id == id)[0]
+        .places_disponibles;
+    },
+    filtrerNom($event) {
+      if ($event.target.value != "") {
+        this.representations_base = this.$store.state.representations_base.filter(
+          (item) => item.spectacleNom.startsWith($event.target.value)
+        );
+      } else {
+        this.representations_base = this.$store.state.representations_base;
+      }
+    },
+    passerInfo(r) {
+      this.modalTitre = r.spectacleNom;
+      this.modalDescription = r.spectacleDescription;
+      this.$store.state.representation = r;
+    },
+    checkFiltre(type, nom, etat) {
+      if (etat) {
+        this[type].push(nom);
+      } else {
+        let index = this[type].indexOf(nom);
+        this[type].splice(index, 1);
+      }
+
+      this.representations_base = this.$store.state.representations_base.filter(
+        (rep) =>
+          (this.genre.length ? this.genre.includes(rep.spectacleType) : true) &&
+          (this.cible.length ? this.cible.includes(rep.spectacleCible) : true)
+      );
+    },
   },
 };
 </script>

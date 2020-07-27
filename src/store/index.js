@@ -5,9 +5,17 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    titre: "",
+    spectacle: {},
+    representations_base: [],
+    desactiveFiltres: false,
+    representation: {},
+    user: {},
+    updateList: false
+
   },
-  mutations: {},
+  mutations: {
+
+  },
   actions: {},
   modules: {}
 });

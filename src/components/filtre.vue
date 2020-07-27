@@ -24,20 +24,37 @@
 <template>
   <div
     class="row my-1 align-items-center filtre"
-    @click="checked = !checked"
-    :class="{ active: checked }"
+    @click="toggleFiltre"
+    :class="{ active: ischecked }"
   >
-    <span class="checkbox "></span>
-    <span class="checkbox-item ">{{ name }} </span>
+    <span class="checkbox"></span>
+    <span class="checkbox-item">{{ name }}</span>
   </div>
 </template>
 <script>
 export default {
   data() {
     return {
-      checked: false,
+      ischecked: false,
     };
   },
-  props: ["name"],
+  computed: {
+    desactive() {
+      return this.$store.state.desactiveFiltres;
+    },
+  },
+  watch: {
+    desactive: function () {
+      this.ischecked = false;
+    },
+  },
+
+  props: ["name", "type"],
+  methods: {
+    toggleFiltre() {
+      this.ischecked = !this.ischecked;
+      this.$emit("check-filtre", this.type, this.name, this.ischecked);
+    },
+  },
 };
 </script>

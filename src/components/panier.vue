@@ -12,27 +12,22 @@
       <table class="table table-striped mt-3">
         <thead>
           <tr>
-            <th>Nom</th>
-            <th>Date</th>
-            <th>Place</th>
+            <th>Nom Spectacle</th>
+            <th>Date Representation</th>
             <th>Rang</th>
+            <th>Place</th>
             <th>prix</th>
+            <th>Profil</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Harry Potter</td>
-            <td>une date</td>
-            <td>2</td>
-            <td>3</td>
-            <td>35 €</td>
-          </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td class="total">Total</td>
-            <td class="total">35 €</td>
+          <tr v-for="t in tickets" :key="t.idTicket">
+            <td>{{idRepToNomSpec(t.representationId)}}</td>
+            <td>{{idRepToDate(t.representationId)}}</td>
+            <td>{{t.placeId.split("_")[0]}}</td>
+            <td>{{t.placeId.split("_")[0]}}</td>
+            <td>{{t.prixTicket}}</td>
+            <td>{{t.profilSpectateur}}</td>
           </tr>
         </tbody>
       </table>
@@ -48,7 +43,36 @@
   </div>
 </template>
 <script>
+import axios from "axios";
 export default {
-    
-}
+  data() {
+    return {
+      user: {},
+      tickets: [],
+    };
+  },
+  mounted() {
+    this.user = this.$store.state.user;
+    console.log(this.user);
+    let idDossier = this.user.dossiersAchat[0].dossierAchatId;
+
+    axios
+      .get(`http://localhost:8081/TicketsPrix/${idDossier}`)
+      .then((response) => {
+        (this.tickets = response.data), console.log(this.tickets);
+      });
+  },
+  methods: {
+    idRepToDate(idRep) {
+      return this.$store.state.representations_base.filter(
+        (r) => r.id == idRep
+      )[0].horaire;
+    },
+    idRepToNomSpec(idRep) {
+      return this.$store.state.representations_base.filter(
+        (r) => r.id == idRep
+      )[0].spectacleNom;
+    },
+  },
+};
 </script>

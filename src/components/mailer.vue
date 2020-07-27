@@ -2,63 +2,88 @@
 </style>
 
 <template>
-  <div class="col-md-8">
+  <div class="col-md-7">
     <h4 class="py-3 text-center">Mailer</h4>
-    <table class="table table-striped">
+    <table class="table">
       <thead>
         <tr>
           <th>Nom</th>
-          <th>Date</th>
+          <th>Email</th>
           <th>Objet</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
-        <tr data-toggle="collapse" data-target="#collapseExample" style="cursor:pointer">
-          <td>client</td>
-          <td>une date</td>
-          <td>Ajout presentation</td>
-        </tr>
-        <tr>
-          <td colspan="3">
-            <div class="collapse" id="collapseExample">
-              <div
-                class="card card-body"
-              >Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.</div>
+        <tr class="mail-items" v-for="m in mails" :key="m.id">
+          <td>{{m.nom}}</td>
+          <td>{{m.email}}</td>
+          <td>{{m.objet}}</td>
+          <td>
+            <div style="visibility:hidden">
+              <i
+                class="fa fa-eye ml-2"
+                style="float:right; font-size: 25px;cursor:pointer "
+                @click="voirMessage($event ,m)"
+              ></i>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
-    <div class="modal" id="mymodal1">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">{{nom}}</h5>
-            <button class="close" data-dismiss="modal">&times;</button>
-          </div>
-          <div class="modal-body">
-            <form action>
-              <div class="form-group mt-4">
-                <label for="date">Date Representation</label>
-                <input type="date" class="form-control" placeholder />
-              </div>
-              <div class="form-group">
-                <label for="promotion">Taux Promotion</label>
-                <input type="number" class="form-control" placeholder />
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button class="btn btn-primary" data-dismiss="modal">Valider</button>
-            <button class="btn btn-danger" data-dismiss="modal">Annuler</button>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 <script>
+import axios from "axios";
+import $ from "jquery";
 export default {
-    
-}
+  data() {
+    return {
+      mails: [],
+      toggle: false,
+    };
+  },
+  methods: {
+    voirMessage($event, m) {
+      if (this.toggle) {
+        const messages = document.querySelectorAll(".message");
+        messages.forEach((m) => (m.style.display = "none"));
+      }
+
+      $(
+        '<tr class="message">' +
+          '<td colspan="4"> <div class="card card-body">' +
+          m.nom +
+          "   :   " +
+          m.message +
+          "</div> </td>" +
+          "</tr>"
+      ).insertAfter($event.target.closest(".mail-items"));
+      this.toggle = true;
+    },
+    affichageEye() {
+      const mail_items = document.querySelectorAll(".mail-items");
+      console.log(mail_items);
+      mail_items.forEach((item) =>
+        item.addEventListener("mouseover", afficher)
+      );
+      mail_items.forEach((item) => item.addEventListener("mouseout", masquer));
+
+      function afficher() {
+        this.lastChild.firstChild.style.visibility = "visible";
+      }
+      function masquer() {
+        this.lastChild.firstChild.style.visibility = "hidden";
+      }
+    },
+  },
+  updated() {
+    this.affichageEye();
+  },
+
+  mounted() {
+    axios.get("http://localhost:8081/mailier").then((response) => {
+      this.mails = response.data;
+    });
+  },
+};
 </script>

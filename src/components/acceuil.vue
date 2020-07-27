@@ -3,19 +3,26 @@
     <Carousel />
     <TheatreInfo />
     <router-view></router-view>
-    <SpectaclesAffichage />
   </div>
 </template>
 <script>
 import Carousel from "./carousel.vue";
 import TheatreInfo from "./theatreInfo.vue";
-import SpectaclesAffichage from "./spectaclesAffichage.vue";
+import axios from "axios";
 export default {
   name: "app",
   components: {
     Carousel,
     TheatreInfo,
-    SpectaclesAffichage,
+  },
+  created() {
+    axios
+      .get(
+        `http://localhost:8081/representations?mode=&dateDebut=&dateFin=&semaine=`
+      )
+      .then((response) => {
+        this.$store.state.representations_base = response.data;
+      });
   },
 };
 </script>

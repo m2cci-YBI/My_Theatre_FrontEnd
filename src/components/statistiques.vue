@@ -1,5 +1,5 @@
 <template>
-  <div class="col-md-8">
+  <div class="col-md-7">
     <h4 class="py-3 text-center">Statistiques</h4>
     <div>
       <canvas id="monChart"></canvas>
@@ -8,11 +8,7 @@
 </template>
 
 <script>
-
-export default {
- 
-   
-};
+export default {};
 </script>
 
 <style></style>

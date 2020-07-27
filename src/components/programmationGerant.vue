@@ -1,9 +1,9 @@
 <template>
-  <div class="col-md-8">
+  <div class="col-md-7">
     <div class="row my-2">
-      <form class="form-inline mx-auto">
+      <form class="form-inline mx-auto" @submit.prevent="onSubmit">
         <div class="input-group">
-          <input type="week" class="form-control" placeholder="Semaine" />
+          <input type="week" class="form-control" v-model="week " />
         </div>
         <div class="input-group">
           <button type="submit" class="btn btn-primary mx-2">Submit</button>
@@ -33,7 +33,31 @@
 <style scoped>
 </style>
 <script>
+import axios from "axios";
 export default {
-    
-}
+  data() {
+    return {
+      representations: [],
+      week: "",
+    };
+  },
+  mounted() {
+    axios
+      .get(
+        `http://localhost:8081/representations?mode=&dateDebut=&dateFin=&semaine=`
+      )
+      .then((response) => (this.representations = response.data))
+      .catch();
+  },
+  methods: {
+    onSubmit() {
+      axios
+        .get(
+          `http://localhost:8081/spectacles?mode=semaine&dateDebut=&dateFin=&semaine=${this.week}`
+        )
+        .then((response) => (this.spectacles = response.data))
+        .catch();
+    },
+  },
+};
 </script>

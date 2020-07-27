@@ -23,12 +23,9 @@
             <input type="text" class="form-control" placeholder />
           </div>
           <div class="row">
-            <router-link to="/">
-              <div class="btn btn-success mr-3">Valider</div>
-            </router-link>
-            <router-link to="/">
-              <div class="btn btn-danger mr-3">Annuler</div>
-            </router-link>
+            <div class="btn btn-success mr-3" @click="ajouterDateTickets">Valider</div>
+
+            <div class="btn btn-danger mr-3" @click="suprimerUser">Annuler</div>
           </div>
         </form>
       </div>
@@ -42,5 +39,30 @@
 }
 </style>
 <script>
-export default {};
+import axios from "axios";
+export default {
+  data() {
+    return {
+      user: {},
+    };
+  },
+  mounted() {
+    this.user = this.$store.state.user;
+  },
+  methods: {
+    ajouterDateTickets() {
+      let idTickets = this.user.dossiersAchat[0].tickets.map((t) => t.idTicket);
+      console.log(idTickets);
+      axios
+        .post("http://localhost:8081/tickets/update", idTickets)
+        .then((response) => console.log(response.data));
+    },
+    suprimerUser() {
+      let userid = this.user.userdId;
+      axios
+        .delete(`http://localhost:8081/users/${userid}`)
+        .then(() => this.$router.replace("/"));
+    },
+  },
+};
 </script>

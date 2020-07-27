@@ -4,10 +4,17 @@
 .zone_selection {
   min-height: 76.5vh;
 }
+.infoRepresentation {
+  display: inline-block;
+}
 </style>
 <template>
   <div class="zone_selection m-3">
     <div class="container-fluid">
+      <div class="row justify-content-center mb-3">
+        <div class="infoRepresentation mr-3 display-4">{{representation.spectacleNom}}</div>
+        <div class="infoRepresentation display-4">{{representation.horaire}}</div>
+      </div>
       <div class="row">
         <div class="col-md-6">
           <div class="row">
@@ -45,12 +52,12 @@
               </b>
             </div>
             <div class="row"></div>
-            <router-link to="/coordonneesPerso">
-              <button class="btn btn-primary mr-2">Confirmer</button>
+            <router-link to>
+              <button class="btn btn-primary mr-2" @click="reserverPlaces">Confirmer</button>
             </router-link>
 
-            <router-link to="/programmation">
-              <button class="btn btn-danger mr-2">Retour</button>
+            <router-link to>
+              <button class="btn btn-danger mr-2" @click="retour">Retour</button>
             </router-link>
           </div>
         </div>
@@ -60,13 +67,25 @@
 </template>
 
 <script>
+import axios from "axios";
 import $ from "jquery";
 import "../assets/js/jQuery-Seat-Charts/jquery.seat-charts.js";
 export default {
+  data() {
+    return {
+      representation: this.$store.state.representation,
+      interval: 0,
+    };
+  },
+
   mounted() {
     var firstSeatLabel = 1;
-    var prixDebase = 30;
+    var prixEnPromotion =
+      this.representation.spectaclePrix *
+      (1 - this.representation.tauxPromotion);
     var tauxReduction = 1;
+    var idrepresentation = this.representation.id;
+    let self = this;
     $(document).ready(function () {
       var $cart = $("#selected-seats"),
         $counter = $("#counter"),
@@ -82,17 +101,17 @@ export default {
           ],
           seats: {
             p: {
-              price: 1.5 * prixDebase,
+              price: 1.5 * prixEnPromotion,
               classes: "Poulailler", //your custom CSS class
               category: "Poulailler",
             },
             b: {
-              price: 1.2 * prixDebase,
+              price: 1.2 * prixEnPromotion,
               classes: "Balcon", //your custom CSS class
               category: "Balcon",
             },
             o: {
-              price: 1 * prixDebase,
+              price: 1 * prixEnPromotion,
               classes: "Orchestre", //your custom CSS class
               category: "Orchestre",
             },
@@ -121,7 +140,7 @@ export default {
             if (this.status() == "available") {
               //let's create a new <li> which we'll add to the cart items
               $(
-                "<tr>" +
+                '<tr class="ticket">' +
                   "<td>" +
                   this.settings.id[2] +
                   "</td>" +
@@ -186,7 +205,7 @@ export default {
                     .forEach(
                       (item) => (total = total + parseFloat(item.innerHTML))
                     );
-                  $total.text(total);
+                  $total.text(total.toFixed(2));
                 })
               );
 
@@ -196,7 +215,7 @@ export default {
                 .forEach(
                   (item) => (total = total + parseFloat(item.innerHTML))
                 );
-              $total.text(total);
+              $total.text(total.toFixed(2));
 
               /*
                * Lets update the counter and total
@@ -219,7 +238,7 @@ export default {
                 .forEach(
                   (item) => (total = total + parseFloat(item.innerHTML))
                 );
-              $total.text(total);
+              $total.text(total.toFixed(2));
 
               //seat has been vacated
               return "available";
@@ -237,19 +256,73 @@ export default {
         //let's just trigger Click event on the appropriate seat, so we don't have to repeat the logic here
         sc.get($(this).parents("tr:first").data("seatId")).click();
       });
+      sc.find("p.available").status("unavailable");
+      sc.find("o.available").status("unavailable");
+      sc.find("b.available").status("unavailable");
 
-      //let's pretend some seats have already been booked
-      sc.get(["1_2", "4_1"]).status("unavailable");
+      function mettreAjourPlace() {
+        axios
+          .get(`http://localhost:8081/representations/${idrepresentation}`)
+          .then((response) => {
+            let representation = response.data;
+            console.log(representation);
+            representation.spectacleZonesDisponibles.forEach((z) =>
+              z.places.forEach((p) => {
+                console.log(p.id);
+                sc.status(p.id, "available");
+              })
+            );
+            let placesNonLibre = representation.tickets.map((t) => t.placeId);
+
+            sc.get([...placesNonLibre]).status("unavailable");
+          });
+      }
+
+      mettreAjourPlace();
+      self.interval = setInterval(mettreAjourPlace, 5000);
     });
-
-    // function recalculateTotal() {
-    //   document
-    //     .querySelectorAll(".prixTicket")
-    //     .forEach((item) => (total = total + parseFloat(item.innerHTML)));
-    //   console.log(total);
-    //   return total;
-    // }
   },
-  methods: {},
+  methods: {
+    retour() {
+      clearInterval(this.interval);
+      this.$router.go(-1);
+    },
+    reserverPlaces() {
+      let user = {
+        userdId: null,
+        dossiersAchat: [{ dossierAchatId: null }],
+      };
+
+      axios.post("http://localhost:8081/users", user).then((response) => {
+        this.$store.state.user = response.data;
+
+        user = this.$store.state.user;
+        let dossierId = user.dossiersAchat[0].dossierAchatId;
+
+        let tickets_node = document.querySelectorAll(".ticket");
+
+        tickets_node.forEach((t, index) =>
+          axios
+            .post(
+              `http://localhost:8081/tickets?estAchatee=false&placeId=${t
+                .getAttribute("id")
+                .substring(
+                  t.getAttribute("id").length - 3
+                )}&representationId=${parseInt(
+                this.representation.id
+              )}&dossierId=${dossierId}&profilSpectateur=${t.getAttribute(
+                "profil"
+              )}`
+            )
+            .then(() => {
+              if (index == tickets_node.length - 1) {
+                clearInterval(this.interval);
+                this.$router.replace("/coordonneesPerso");
+              }
+            })
+        );
+      });
+    },
+  },
 };
 </script>
