@@ -53,6 +53,11 @@ export default {
   },
   mounted() {
     this.user = this.$store.state.user;
+    if (this.user.nom != undefined) {
+      this.nom = this.user.nom;
+      this.prenom = this.user.prenom;
+      this.email = this.user.email;
+    }
   },
   methods: {
     submit(option) {
@@ -70,8 +75,11 @@ export default {
 
       axios.post("http://localhost:8081/users", user).then((response) => {
         this.$store.state.user = response.data;
-
+        let idDossier = this.$store.state.dossierId;
         if (option === 1) {
+          axios.get(
+            `http://localhost:8081/ConfirmationReservation?idUser=${userId}&idDossier=${idDossier}`
+          );
           this.$router.replace("/");
         } else {
           this.$router.replace("/coordonneesBancaires");

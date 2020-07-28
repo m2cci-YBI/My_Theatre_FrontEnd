@@ -9,7 +9,11 @@ export default new Vuex.Store({
     representations_base: [],
     desactiveFiltres: false,
     representation: {},
-    user: {},
+    dossierId: 0,
+    user: {
+      userdId: null,
+      dossiersAchat: [{ dossierAchatId: null }],
+    },
     updateList: false
 
   },

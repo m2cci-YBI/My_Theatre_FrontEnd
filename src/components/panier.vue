@@ -7,38 +7,46 @@
 }
 </style>
 <template>
-  <div class="container zone bg-light">
-    <div class="row">
-      <table class="table table-striped mt-3">
-        <thead>
-          <tr>
-            <th>Nom Spectacle</th>
-            <th>Date Representation</th>
-            <th>Rang</th>
-            <th>Place</th>
-            <th>prix</th>
-            <th>Profil</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="t in tickets" :key="t.idTicket">
-            <td>{{idRepToNomSpec(t.representationId)}}</td>
-            <td>{{idRepToDate(t.representationId)}}</td>
-            <td>{{t.placeId.split("_")[0]}}</td>
-            <td>{{t.placeId.split("_")[0]}}</td>
-            <td>{{t.prixTicket}}</td>
-            <td>{{t.profilSpectateur}}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="row">
-      <router-link to="/coordonneesBancaires">
-        <button type="submit" class="btn btn-primary mx-2">Payer</button>
-      </router-link>
-      <router-link to="/">
-        <button type="submit" class="btn btn-danger mx-2">Home</button>
-      </router-link>
+  <div class="zone bg-light">
+    <div class="container my-3" v-if="this.user.userdId != null">
+      <div class="row" v-for="d in user.dossiersAchat" :key="d.dossierAchatId">
+        <div class="container">
+          <h4>
+            <span class="mr-2">{{idRepToNomSpec(d.tickets[0].representationId)}}</span>
+            <span>{{idRepToDate(d.tickets[0].representationId)}}</span>
+          </h4>
+          <div class="row">
+            <table class="table table-striped mt-3">
+              <thead>
+                <tr>
+                  <th>Rang</th>
+                  <th>Place</th>
+                  <th>prix</th>
+                  <th>Profil</th>
+                  <th>Etat</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="t in d.tickets" :key="t.idTicket">
+                  <td>{{t.placeId.split("_")[0]}}</td>
+                  <td>{{t.placeId.split("_")[1]}}</td>
+                  <td>{{t.prixTicket.toFixed(2)}}</td>
+                  <td>{{t.profilSpectateur}}</td>
+                  <td>{{t.estAchatee? "Acheté":"Réservé"}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="row mb-2">
+            <button
+              type="submit"
+              class="btn btn-primary mx-2"
+              @click="payer(d.dossierAchatId)"
+              :disabled="d.tickets[0].estAchatee"
+            >Payer</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -48,19 +56,22 @@ export default {
   data() {
     return {
       user: {},
-      tickets: [],
     };
   },
-  mounted() {
+  created() {
     this.user = this.$store.state.user;
-    console.log(this.user);
-    let idDossier = this.user.dossiersAchat[0].dossierAchatId;
 
-    axios
-      .get(`http://localhost:8081/TicketsPrix/${idDossier}`)
-      .then((response) => {
-        (this.tickets = response.data), console.log(this.tickets);
+    if (this.user.userdId != null) {
+      this.user.dossiersAchat.forEach((element) => {
+        axios
+          .get(`http://localhost:8081/TicketsPrix/${element.dossierAchatId}`)
+          .then((response) => {
+            element.tickets = response.data;
+          });
+        setTimeout(console.log("jattends la reponse serveur"), 1000);
       });
+    }
+    console.log(this.user);
   },
   methods: {
     idRepToDate(idRep) {
@@ -72,6 +83,10 @@ export default {
       return this.$store.state.representations_base.filter(
         (r) => r.id == idRep
       )[0].spectacleNom;
+    },
+    payer(dossierId) {
+      this.$store.state.dossierId = dossierId;
+      this.$router.replace("/coordonneesBancaires");
     },
   },
 };

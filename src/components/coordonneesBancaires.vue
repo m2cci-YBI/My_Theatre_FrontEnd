@@ -46,16 +46,30 @@ export default {
       user: {},
     };
   },
-  mounted() {
-    this.user = this.$store.state.user;
+  created() {
+    let userId = this.$store.state.user.userdId;
+    axios.get(`http://localhost:8081/users/${userId}`).then((response) => {
+      this.user = response.data;
+      this.$store.state.user = this.user;
+    });
   },
   methods: {
     ajouterDateTickets() {
-      let idTickets = this.user.dossiersAchat[0].tickets.map((t) => t.idTicket);
-      console.log(idTickets);
+      let userId = this.$store.state.user.userdId;
+      let dossierId = this.$store.state.dossierId;
+      let dossierAchat = this.user.dossiersAchat.filter(
+        (d) => d.dossierAchatId == dossierId
+      )[0];
+      let idTickets = dossierAchat.tickets.map((t) => t.idTicket);
+
       axios
         .post("http://localhost:8081/tickets/update", idTickets)
-        .then((response) => console.log(response.data));
+        .then((response) => {
+          console.log(response.data);
+          axios.get(
+            `http://localhost:8081/ConfirmationAchat?idUser=${userId}&idDossier=${dossierId}`
+          );
+        });
     },
     suprimerUser() {
       let userid = this.user.userdId;

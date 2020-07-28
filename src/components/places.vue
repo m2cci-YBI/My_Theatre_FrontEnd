@@ -259,27 +259,32 @@ export default {
       sc.find("p.available").status("unavailable");
       sc.find("o.available").status("unavailable");
       sc.find("b.available").status("unavailable");
+      axios
+        .get(`http://localhost:8081/representations/${idrepresentation}`)
+        .then((response) => {
+          let representation = response.data;
+
+          representation.spectacleZonesDisponibles.forEach((z) =>
+            z.places.forEach((p) => {
+              console.log(p.id);
+              sc.status(p.id, "available");
+            })
+          );
+          mettreAjourPlace();
+          self.interval = setInterval(mettreAjourPlace, 5000);
+        });
 
       function mettreAjourPlace() {
         axios
           .get(`http://localhost:8081/representations/${idrepresentation}`)
           .then((response) => {
             let representation = response.data;
-            console.log(representation);
-            representation.spectacleZonesDisponibles.forEach((z) =>
-              z.places.forEach((p) => {
-                console.log(p.id);
-                sc.status(p.id, "available");
-              })
-            );
+
             let placesNonLibre = representation.tickets.map((t) => t.placeId);
 
             sc.get([...placesNonLibre]).status("unavailable");
           });
       }
-
-      mettreAjourPlace();
-      self.interval = setInterval(mettreAjourPlace, 5000);
     });
   },
   methods: {
@@ -288,40 +293,74 @@ export default {
       this.$router.go(-1);
     },
     reserverPlaces() {
-      let user = {
-        userdId: null,
-        dossiersAchat: [{ dossierAchatId: null }],
-      };
+      let user = this.$store.state.user;
+      if (user.userdId == null) {
+        axios.post("http://localhost:8081/users", user).then((response) => {
+          this.$store.state.user = response.data;
 
-      axios.post("http://localhost:8081/users", user).then((response) => {
-        this.$store.state.user = response.data;
+          user = this.$store.state.user;
+          let dossierId = user.dossiersAchat[0].dossierAchatId;
+          this.$store.state.dossierId = dossierId;
+          let tickets_node = document.querySelectorAll(".ticket");
 
-        user = this.$store.state.user;
-        let dossierId = user.dossiersAchat[0].dossierAchatId;
+          tickets_node.forEach((t, index) =>
+            axios
+              .post(
+                `http://localhost:8081/tickets?estAchatee=false&placeId=${t
+                  .getAttribute("id")
+                  .substring(
+                    t.getAttribute("id").length - 3
+                  )}&representationId=${parseInt(
+                  this.representation.id
+                )}&dossierId=${dossierId}&profilSpectateur=${t.getAttribute(
+                  "profil"
+                )}`
+              )
+              .then(() => {
+                if (index == tickets_node.length - 1) {
+                  clearInterval(this.interval);
+                  this.$router.replace("/coordonneesPerso");
+                }
+              })
+          );
+        });
+      } else {
+        let dossierAchat = {
+          dossiersAchat: { dossierAchatId: null },
+          user: { userdId: user.userdId },
+        };
+        axios
+          .post("http://localhost:8081/dossiersAchats", dossierAchat)
+          .then((response) => {
+            let dossierAchat = response.data;
 
-        let tickets_node = document.querySelectorAll(".ticket");
+            let dossierId = dossierAchat.dossierAchatId;
+            this.$store.state.dossierId = dossierId;
 
-        tickets_node.forEach((t, index) =>
-          axios
-            .post(
-              `http://localhost:8081/tickets?estAchatee=false&placeId=${t
-                .getAttribute("id")
-                .substring(
-                  t.getAttribute("id").length - 3
-                )}&representationId=${parseInt(
-                this.representation.id
-              )}&dossierId=${dossierId}&profilSpectateur=${t.getAttribute(
-                "profil"
-              )}`
-            )
-            .then(() => {
-              if (index == tickets_node.length - 1) {
-                clearInterval(this.interval);
-                this.$router.replace("/coordonneesPerso");
-              }
-            })
-        );
-      });
+            let tickets_node = document.querySelectorAll(".ticket");
+
+            tickets_node.forEach((t, index) =>
+              axios
+                .post(
+                  `http://localhost:8081/tickets?estAchatee=false&placeId=${t
+                    .getAttribute("id")
+                    .substring(
+                      t.getAttribute("id").length - 3
+                    )}&representationId=${parseInt(
+                    this.representation.id
+                  )}&dossierId=${dossierId}&profilSpectateur=${t.getAttribute(
+                    "profil"
+                  )}`
+                )
+                .then(() => {
+                  if (index == tickets_node.length - 1) {
+                    clearInterval(this.interval);
+                    this.$router.replace("/coordonneesPerso");
+                  }
+                })
+            );
+          });
+      }
     },
   },
 };
