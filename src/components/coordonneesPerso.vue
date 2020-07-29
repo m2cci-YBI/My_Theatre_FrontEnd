@@ -23,11 +23,11 @@
             <input type="email" name id class="form-control" v-model="email" />
           </div>
           <div class="row">
-            <div class="btn btn-primary mx-3" @click="submit(1)">Reserver</div>
+            <button class="btn btn-primary mx-3" :disabled="!reservable" @click="submit(1)">Reserver</button>
 
-            <div class="btn btn-success mr-3" @click="submit(2)">Acheter</div>
+            <button class="btn btn-success mr-3" @click="submit(2)">Acheter</button>
 
-            <div class="btn btn-danger mr-3" @click="suprimerUser()">Retour</div>
+            <button class="btn btn-danger mr-3" @click="suprimerUser()">Retour</button>
           </div>
         </form>
       </div>
@@ -51,7 +51,14 @@ export default {
       email: "",
     };
   },
+  computed: {
+    reservable() {
+      return this.$store.state.representation.reservable;
+    },
+  },
+
   mounted() {
+    console.log(this.reservable);
     this.user = this.$store.state.user;
     if (this.user.nom != undefined) {
       this.nom = this.user.nom;

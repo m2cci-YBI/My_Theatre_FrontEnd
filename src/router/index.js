@@ -11,12 +11,13 @@ import CoordonneesPerso from "../components/coordonneesPerso.vue";
 import CoordonneesBancaires from "../components/coordonneesBancaires.vue";
 import Panier from "../components/panier.vue";
 import Login from "../components/login.vue";
+import Configuration from "../components/configuration.vue";
 import Dashboard from "../components/dashboard.vue";
 import Contact from "../components/contact.vue";
 import Mailer from "../components/mailer.vue";
 import ProgrammationGerant from "../components/programmationGerant.vue"
-import ProgrammationGerantSpec from "../components/programmationGerantSpec.vue"
-import Statistiques from "../components/statistiques.vue"
+import ConfigurationRep from "../components/configurationRep.vue"
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -31,8 +32,13 @@ const routes = [
     path: "/dashboard", component: Dashboard, children: [
       { path: "/dashboard", component: ProgrammationGerant },
       { path: "/dashboard/mailer", component: Mailer },
-      { path: "/dashboard/statistiques", component: Statistiques },
-      { path: "/dashboard/spectacles", component: ProgrammationGerantSpec },
+      {
+        path: "/dashboard/configuration", component: Configuration, children: [
+
+          { path: "", component: ConfigurationRep },
+        ]
+      }
+
     ]
   },
   {

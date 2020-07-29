@@ -2,7 +2,7 @@
 </style>
 
 <template>
-  <div class="col-md-7">
+  <div class="col-md-10">
     <h4 class="py-3 text-center">Mailer</h4>
     <table class="table">
       <thead>

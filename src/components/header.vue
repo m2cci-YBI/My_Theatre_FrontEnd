@@ -38,9 +38,9 @@ export default {
   mounted() {
     const items = document.querySelectorAll(".nav-item");
     const brand_item = document.querySelector(".navbar-brand");
-   
+
     brand_item.addEventListener("click", activerHome);
-   
+
     items.forEach((item) => item.addEventListener("click", activer));
     function activerHome() {
       items.forEach((element) => {
@@ -55,14 +55,11 @@ export default {
       this.classList.add("active");
     }
   },
-  methods:{
-    logout(){
-      
-      this.$router.replace('/')
-    }
-      
-    
-  }
+  methods: {
+    logout() {
+      this.$router.replace("/");
+    },
+  },
 };
 </script>
 

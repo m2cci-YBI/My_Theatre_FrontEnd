@@ -1,14 +1,14 @@
 <style scoped>
 </style>
 <template>
-  <div class="col-7">
+  <div>
     <h4 class="py-3 text-center">{{spectacle.nom}}</h4>
     <table class="table table-striped">
       <thead>
         <tr>
           <th>Nom Spectacle</th>
           <th>Date Representation</th>
-          <th>DateFinReservations</th>
+          <th>Possibilité de Pre-reservation</th>
           <th>Taux Promotion</th>
           <th>Tickets Reservés</th>
           <th>
@@ -26,7 +26,7 @@
           <td>{{r.spectacleNom}}</td>
           <td>{{r.horaire}}</td>
 
-          <td>{{r.dateFinPrereservation}}</td>
+          <td>{{r.reservable? "Possible":"Pas Possible"}}</td>
           <td>{{r.tauxPromotion}}</td>
           <td>{{r.tickets.length}}</td>
 
@@ -56,8 +56,11 @@
                 <input type="datetime-local" class="form-control" v-model="dateRepresentation" />
               </div>
               <div class="form-group mt-4">
-                <label for="date">Date De Fin Des Reservations</label>
-                <input type="datetime-local" class="form-control" v-model="dateFinReservation" />
+                <label for="reservable">Pre-reservation</label>
+                <select class="form-control" v-model="reservable">
+                  <option value="true">Possible</option>
+                  <option value="false">Pas Possible</option>
+                </select>
               </div>
               <div class="form-group">
                 <label for="promotion">Taux Promotion %</label>
@@ -84,7 +87,7 @@ export default {
   data() {
     return {
       dateRepresentation: "",
-      dateFinReservation: "",
+      reservable: "",
       tauxPromotion: "",
     };
   },
@@ -107,9 +110,9 @@ export default {
     ajouterRep(specid) {
       axios
         .post(
-          `http://localhost:8081/representations?dateFinPrereservation=${this.formatDate(
-            this.dateFinReservation
-          )}&horaire=${this.formatDate(
+          `http://localhost:8081/representations?reservable=${
+            this.reservable
+          }&horaire=${this.formatDate(
             this.dateRepresentation
           )}&spectacleId=${specid}&tauxPromotion=${this.tauxPromotion / 100}`
         )

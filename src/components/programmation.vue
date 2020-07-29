@@ -122,6 +122,7 @@ img {
               </div>
               <div class="col-8">
                 <div>{{modalDescription}}</div>
+                <div>pré-reservation :{{modalPrereservation? "Possible":"Expiré"}}</div>
               </div>
             </div>
           </div>
@@ -152,6 +153,7 @@ export default {
       etatFiltres: false,
       modalTitre: "",
       modalDescription: "",
+      modalPrereservation: Boolean,
     };
   },
   mounted() {
@@ -203,6 +205,7 @@ export default {
     passerInfo(r) {
       this.modalTitre = r.spectacleNom;
       this.modalDescription = r.spectacleDescription;
+      this.modalPrereservation = r.reservable;
       this.$store.state.representation = r;
     },
     checkFiltre(type, nom, etat) {
