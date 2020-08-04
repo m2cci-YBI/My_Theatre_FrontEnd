@@ -13,19 +13,19 @@
           <li class="nav-item">
             <router-link to="/programmation" class="nav-link">Programmation</router-link>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" v-if=" (auth && !isAdmin)">
             <router-link to="/panier" class="nav-link">Panier</router-link>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" v-if=" (auth && isAdmin)">
             <router-link to="/dashboard" class="nav-link">Dashboard</router-link>
           </li>
           <li class="nav-item">
             <router-link to="/contact" class="nav-link">Contact</router-link>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" v-if="!auth">
             <router-link to="/login" class="nav-link">Login</router-link>
           </li>
-          <li class="nav-item" @click="logout">
+          <li class="nav-item" v-if="auth" @click="logout">
             <router-link to class="nav-link">Logout</router-link>
           </li>
         </ul>
@@ -35,6 +35,14 @@
 </template>
 <script>
 export default {
+  computed: {
+    auth() {
+      return this.$store.state.auth;
+    },
+    isAdmin() {
+      return this.$store.state.isAdmin;
+    },
+  },
   mounted() {
     const items = document.querySelectorAll(".nav-item");
     const brand_item = document.querySelector(".navbar-brand");
@@ -57,6 +65,15 @@ export default {
   },
   methods: {
     logout() {
+      localStorage.removeItem("jwtToken");
+      localStorage.removeItem("vuex");
+      this.$store.state.user = {
+        userdId: null,
+        dossiersAchat: [{ dossierAchatId: null }],
+      };
+      this.$store.state.auth = false;
+      this.$store.state.roles = [];
+      this.$store.state.isAdmin = false;
       this.$router.replace("/");
     },
   },

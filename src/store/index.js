@@ -10,6 +10,9 @@ export default new Vuex.Store({
     desactiveFiltres: false,
     representation: {},
     dossierId: 0,
+    auth: false,
+    isAdmin: false,
+    roles: [],
     user: {
       userdId: null,
       dossiersAchat: [{ dossierAchatId: null }],

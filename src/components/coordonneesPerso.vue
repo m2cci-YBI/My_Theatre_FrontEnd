@@ -97,7 +97,7 @@ export default {
       let userid = this.user.userdId;
       axios
         .delete(`http://localhost:8081/users/${userid}`)
-        .then(() => this.$router.go(-1));
+        .then(() => this.$router.push("places"));
     },
   },
 };

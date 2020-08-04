@@ -25,7 +25,7 @@
           <div class="row">
             <div class="btn btn-success mr-3" @click="ajouterDateTickets">Valider</div>
 
-            <div class="btn btn-danger mr-3" @click="suprimerUser">Annuler</div>
+            <div class="btn btn-danger mr-3" @click="retour">Annuler</div>
           </div>
         </form>
       </div>
@@ -69,13 +69,15 @@ export default {
           axios.get(
             `http://localhost:8081/ConfirmationAchat?idUser=${userId}&idDossier=${dossierId}`
           );
+          this.$router.push("/");
         });
     },
-    suprimerUser() {
-      let userid = this.user.userdId;
-      axios
-        .delete(`http://localhost:8081/users/${userid}`)
-        .then(() => this.$router.replace("/"));
+    retour() {
+      if (this.$store.state.auth) {
+        this.$router.push("panier");
+      } else {
+        this.$router.push("coordonneesPerso");
+      }
     },
   },
 };
