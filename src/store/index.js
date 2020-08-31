@@ -5,24 +5,24 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    spectacle: {},
-    representations_base: [],
-    desactiveFiltres: false,
-    representation: {},
-    dossierId: 0,
     auth: false,
     isAdmin: false,
     roles: [],
+
+    spectacle: {},
+    representations_base: [],
+    representation: {},
+    dossierId: 0,
+
+    desactiveFiltres: false,
+    updateList: false,
     user: {
       userdId: null,
       dossiersAchat: [{ dossierAchatId: null }],
-    },
-    updateList: false
+    }
+
 
   },
-  mutations: {
 
-  },
-  actions: {},
-  modules: {}
+
 });

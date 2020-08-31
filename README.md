@@ -55,4 +55,17 @@ module de routage de vuejs
     ```
     "vue-router": "^3.2.0",
     ```
+module d'envoi de requette asynchrone 
+    ```
+    "axios": "^0.19.2"
+    ```
+module de store
+    ```
+   "vuex": "^3.4.0"
+    ```
+Librairie de decodage du token jwt
+    ```
+   "vue-jwt-decode": "^0.1.0",
+    ```
+
 
