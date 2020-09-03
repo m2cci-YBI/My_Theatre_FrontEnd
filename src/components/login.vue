@@ -1,6 +1,6 @@
 <template>
   <div class="container bg-light zone my-2">
-    <div class="alert alert-danger" role="alert">Vos identifiants sont erronés</div>
+    <!-- <div class="alert alert-danger" role="alert">Vos identifiants sont erronés</div> -->
     <div class="row">
       <div class="col-md-6 offset-3 mt-2">
         <h3>Login</h3>

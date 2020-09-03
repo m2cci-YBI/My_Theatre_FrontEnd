@@ -1,4 +1,10 @@
 <style scoped>
+.prereservation {
+  border-radius: 40px;
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 0px;
+}
 .programmation {
   min-height: 76.5vh;
 }
@@ -121,8 +127,13 @@ img {
                 <img src="../assets/harryPotter.jpg" alt />
               </div>
               <div class="col-8">
+                <div>Description :</div>
+                <br />
                 <div>{{modalDescription}}</div>
-                <div>pré-reservation :{{modalPrereservation? "Possible":"Expiré"}}</div>
+                <br />
+                <div
+                  class="prereservation"
+                >pré-reservation :{{modalPrereservation? "Possible":"Expiré"}}</div>
               </div>
             </div>
           </div>

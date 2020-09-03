@@ -1,13 +1,13 @@
 <template>
   <div class="container zone my-2">
-    <div class="alert alert-success" role="alert">
+    <!-- <div class="alert alert-success" role="alert">
       Votre demande a été realisé avec success, vous receverez un mail de
       confirmation votre commande
     </div>
-    <div class="alert alert-danger" role="alert">Votre commande a été annulé</div>
+    <div class="alert alert-danger" role="alert">Votre commande a été annulé</div>-->
     <div class="row">
       <div class="col-md-6 offset-3 mt-2">
-        <h3>Renseigner Vos Coordonnees Personnelles</h3>
+        <h3>Renseigner Vos Coordonnées Personnelles</h3>
 
         <form @submit.prevent>
           <div class="form-group mt-4">
